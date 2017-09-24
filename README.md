@@ -11,5 +11,5 @@
 
 # To Add Table to Database
 1. Add a new class to `models.py`
-2. Run `flask db migrate` to create the migration file
-3. Run `flask db upgrade` to update the database
+2. Run `python3 manage.py db migrate` to create the migration file
+3. Run `python3 manage.py flask db upgrade` to update the database

@@ -23,3 +23,15 @@ class Bet(db.Model):
 
     def __repr__(self):
         return '<Bet id: {}>'.format(self.id)
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @staticmethod
+    def get_all():
+        return Bet.query.all()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
