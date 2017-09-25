@@ -5,7 +5,7 @@ from app import models
 
 betRoutes = Blueprint('betsBp', __name__)
 
-@route('/', methods=['GET'])
+@betRoutes.route('/', methods=['GET'])
 def hello_world():
     # GET
     bets = models.Bet.get_all()
