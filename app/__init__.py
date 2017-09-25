@@ -20,10 +20,10 @@ def create_app(config_name):
 
     migrate = Migrate(app, db)
 
-    from .bets import bets as bets_blueprint
+    from .betsBp import betRoutes as bets_blueprint
     app.register_blueprint(bets_blueprint, url_prefix='/bets')
 
-    from .auth import auth as auth_blueprint
+    from .authBp import authRoutes as auth_blueprint
     app.register_blueprint(auth_blueprint)
 
 

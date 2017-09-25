@@ -1,9 +1,11 @@
-from flask import request, jsonify, abort
+from flask import request, jsonify, abort, Blueprint
 
-from . import bets
+
 from app import models
 
-@bets.route('/', methods=['GET'])
+betRoutes = Blueprint('betsBp', __name__)
+
+@route('/', methods=['GET'])
 def hello_world():
     # GET
     bets = models.Bet.get_all()
