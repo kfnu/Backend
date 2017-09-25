@@ -32,6 +32,6 @@ def checkLogin():
 			userid = idinfo['sub']
 			return jsonify({'result' : True, 'selfToken' : "askdjaksdjqoiwuoqiuwjkleaksd"})
 		except ValueError:
-		    Invalid token
+		    # Invalid token
 			return jsonify({'result' : False, 'error' : "Invalid token"})
 	return jsonify({'result' : False, 'error' : "Invalid request"})
