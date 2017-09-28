@@ -20,6 +20,9 @@ def create_app(config_name):
 
     migrate = Migrate(app, db)
 
+    from .usersBp import userRoutes as user_blueprint
+    app.register_blueprint(user_blueprint, url_prefix='/account')
+
     from .betsBp import betRoutes as bets_blueprint
     app.register_blueprint(bets_blueprint, url_prefix='/bets')
 
