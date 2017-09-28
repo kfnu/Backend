@@ -1,12 +1,41 @@
 from app import db
 
+class User(db.Model):
+    """
+         Create the Users table
+    """
+
+    __tabelname_ = 'Users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(32), nullable=False)
+    email = db.Column(db.String(60), nullable=False)
+    birthday = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, id, username, email, birthday):
+        self.id = id
+        self.username = username
+        self.email = email
+        self.birthday = birthday
+
+    def __repr__(self):
+        return '<User id: {}, Username: {}, Email: {}, Birthday: {}>'.format(self.id, self.username, self.email, self.birthday)
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
 
 class Bet(db.Model):
     """
         Create a Bet table
     """
 
-    __tablename__ = 'bets'
+    __tablename__ = 'Bets'
 
     id = db.Column(db.Integer, primary_key=True)
     max_users = db.Column(db.String(60))
