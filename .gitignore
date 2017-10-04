@@ -2,3 +2,5 @@ config.py
 .idea/
 .idea
 pycache/
+*.pyc
+betcha.wsgi
