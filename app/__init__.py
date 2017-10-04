@@ -24,7 +24,7 @@ def create_app(config_name):
     app.register_blueprint(user_blueprint, url_prefix='/account')
 
     from .betsBp import betRoutes as bets_blueprint
-    app.register_blueprint(bets_blueprint, url_prefix='/bets')
+    app.register_blueprint(bets_blueprint)
 
     from .authBp import authRoutes as auth_blueprint
     app.register_blueprint(auth_blueprint)
