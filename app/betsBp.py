@@ -23,6 +23,6 @@ def hello_world():
         }
         results.append(obj)
 
-    response = jsonify(results)
+    response = jsonify({'bets': results})
     response.status_code = 200
     return response
