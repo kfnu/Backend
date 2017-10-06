@@ -14,8 +14,12 @@ class User(db.Model):
     email = db.Column(db.String(60), unique=True, nullable=False)
     birthday = db.Column(db.DateTime, nullable=True)
 
-    # friend_to = db.relationship('Friend', backref='to', primaryjoin='User.id==Friend.user_to')
-    # friend_from = db.relationship('Friend', backref='from', primaryjoin='User.id==Friend.user_from')
+    bets_created = db.relationship('Bets', backref='user', lazy=True)
+
+    bets_in = db.relationship('BetUsers', backref='user', lazy=True)
+
+    friend_to = db.relationship('Friend', backref='to', primaryjoin='User.id==Friend.user_to')
+    friend_from = db.relationship('Friend', backref='from', primaryjoin='User.id==Friend.user_from')
 
     def __init__(self, username, email, birthday):
         self.username = username
@@ -86,17 +90,23 @@ class Bet(db.Model):
     __tablename__ = 'Bets'
 
     id = db.Column(db.Integer, primary_key=True)
+    creator_id = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
     max_users = db.Column(db.String(60))
     title = db.Column(db.String(60), nullable=False)
     text = db.Column(db.String(255))
     amount = db.Column(db.Integer, nullable=False)
     completed = db.Column(db.Boolean, default=False, nullable=False)
+    locked = db.Column(db.Boolean, default=False, nullable=False)
 
-    def __init__(self, max_users, title, text, amount):
+    bet_users = db.relationship('BetUsers', backref='bet', lazy=True)
+
+    def __init__(self, creator_id, max_users, title, text, amount, locked):
+        self.creator_id = creator_id
         self.max_users = max_users
         self.title = title
         self.text = text
         self.amount = amount
+        self.locked = locked
 
     def __repr__(self):
         return '<Bet id: {}>'.format(self.id)
@@ -108,6 +118,42 @@ class Bet(db.Model):
     @staticmethod
     def get_all():
         return Bet.query.all()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
+class BetUsers(db.Model):
+    """
+        Create a BetUsers table
+    """
+
+    __tablename__ = 'BetUsers'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    bet_id = db.Column(db.Integer, db.ForeignKey('Bets.id'),
+                       nullable=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('Users.id'),
+                       nullable=False)
+
+
+    def __init__(self, bet_id, user_id):
+        self.bet_id = bet_id
+        self.user_id = user_id
+
+    def __repr__(self):
+        return '<BetUsers id: {}>'.format(self.id)
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @staticmethod
+    def get_all():
+        return BetUsers.query.all()
 
     def delete(self):
         db.session.delete(self)
