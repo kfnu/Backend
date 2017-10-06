@@ -25,22 +25,30 @@ def getFriends():
 
         # friends = db.session.query(Friend).filter(or_(Friend.user_to == id, Friend.user_from == id))
 
-
         id = user.id
-        print("Here")
 
         friends_to = db.session.query(Friend).filter_by(user_to=id).all()
         friends_from = db.session.query(Friend).filter_by(user_from=id).all()
-
 
         friends = friends_to + friends_from
 
         results = []
         for friend in friends:
+            if friend.user_to == id:
+                user = db.session.query(User).filter_by(id=friend.user_from).first()
+            else:
+                user = db.session.query(User).filter_by(id=friend.user_to).first()
+
+            if user is None:
+                return jsonify({'result': False, 'error': 'User not found'}), 400
+
             obj = {
                 'status': friend.status,
-                'user_to': friend.user_to,
-                'user_from': friend.user_from
+                'friend': {
+                    'username': user.username,
+                    'email': user.email,
+                    'birthday': user.birthday
+                }
             }
             results.append(obj)
         response = jsonify(results), 200
