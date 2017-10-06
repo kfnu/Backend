@@ -14,12 +14,16 @@ class User(db.Model):
     email = db.Column(db.String(60), unique=True, nullable=False)
     birthday = db.Column(db.DateTime, nullable=True)
 
-    bets_created = db.relationship('Bet', backref='user', lazy=True)
+    bets_created = db.relationship('Bet', backref='user', lazy=True,
+                                   cascade='all, delete-orphan')
 
-    bets_in = db.relationship('BetUsers', backref='user', lazy=True)
+    bets_in = db.relationship('BetUsers', backref='user', lazy=True,
+                              cascade='all, delete-orphan')
 
-    friend_to = db.relationship('Friend', backref='to', primaryjoin='User.id==Friend.user_to')
-    friend_from = db.relationship('Friend', backref='from', primaryjoin='User.id==Friend.user_from')
+    friend_to = db.relationship('Friend', backref='to', primaryjoin='User.id==Friend.user_to',
+                                cascade="all, delete-orphan")
+    friend_from = db.relationship('Friend', backref='from', primaryjoin='User.id==Friend.user_from',
+                                  cascade="all, delete-orphan")
 
     def __init__(self, username, email, birthday):
         self.username = username

@@ -82,6 +82,9 @@ def deleteUser():
         if email is False:
             return jsonify({'result': False, 'error': 'Failed Token'}), 400
         user = db.session.query(User).filter_by(email=email).first()
+
+
+
         if user is None:
             return jsonify({'result': False, 'error': 'User does not exist'}), 400
         db.session.delete(user)
