@@ -82,9 +82,27 @@ def deleteUser():
         if email is False:
             return jsonify({'result': False, 'error': 'Failed Token'}), 400
         user = db.session.query(User).filter_by(email=email).first()
+
         if user is None:
             return jsonify({'result': False, 'error': 'User does not exist'}), 400
         db.session.delete(user)
         db.session.commit()
         return jsonify({'result': True, 'error': ''}), 200
+    return jsonify({'result': False, 'error': "Invalid request"}), 400
+
+@userRoutes.route('/get', methods=['POST'])
+def getIdByEmail():
+    if request.method == 'POST':
+        payload = json.loads(request.data.decode())
+        token = payload['authToken']
+        email = payload['email']
+        if authClass.decode_jwt(token) is False:
+            return jsonify({'result': False, 'error': 'Failed Token'}), 400
+
+        user = db.session.query(User).filter_by(email=email).first()
+        if user is None:
+            return jsonify({'resuslt': True, 'error': ''}), 400
+
+        return jsonify({'result': True, 'error': '', 'id': user.id}), 200
+
     return jsonify({'result': False, 'error': "Invalid request"}), 400

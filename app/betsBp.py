@@ -41,11 +41,15 @@ def my_bets():
 
         email = authClass.decode_jwt(token)
 
-        user_id = db.session.query(User).filter_by(email=email).first()
+        user = db.session.query(models.User).filter_by(email=email).first()
+
+
         if email is False:
             return jsonify({'result': False, 'error': 'Failed Token'}), 400
         else:
-            bets = models.Bet.query.filter(models.Bet.creator_id == user_id)
+
+
+            bets = db.session.query(models.Bet).filter_by(creator_id=user.id)
             results = []
 
             for bet in bets:
@@ -66,6 +70,7 @@ def my_bets():
             response.status_code = 200
             return response
 
+
 @betRoutes.route('/createbet', methods=['POST'])
 def create_bet():
 
@@ -73,17 +78,29 @@ def create_bet():
 
     if request.method == 'POST':
         payload = json.loads(request.data.decode())
+
+        print(payload)
+
+
         token = payload['authToken']
 
-        if authClass.decode_jwt(token) is False:
+
+        email = authClass.decode_jwt(token)
+
+        user = db.session.query(models.User).filter_by(email=email).first()
+
+
+        if email is False:
             return jsonify({'result': False, 'error': 'Failed Token'}), 400
         else:
-            creator = payload['creator']
+
+            creator = user.id
             maxUsers = payload['maxUsers']
             title = payload['title']
             text = payload['description']
             amount = payload['amount']
             locked = payload['locked']
+
 
             try:
                 bet = models.Bet(creator, maxUsers, title, text, amount, locked)
