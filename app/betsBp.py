@@ -83,7 +83,9 @@ def create_bet():
 
         token = payload['betInformationRequest']['authToken']
 
-        newBet = payload['betInformationRequest']['betInformation']
+
+        token = payload['authToken']
+
 
         email = authClass.decode_jwt(token)
 
@@ -95,11 +97,11 @@ def create_bet():
         else:
 
             creator = user.id
-            maxUsers = newBet['maxUsers']
-            title = newBet['title']
-            text = newBet['description']
-            amount = newBet['amount']
-            locked = newBet['locked']
+            maxUsers = payload['maxUsers']
+            title = payload['title']
+            text = payload['description']
+            amount = payload['amount']
+            locked = payload['locked']
 
 
             try:
