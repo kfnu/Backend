@@ -50,6 +50,34 @@ class User(db.Model):
         db.session.commit()
 
 
+class Friend(db.Model):
+    """
+        Create the Friends table
+    """
+
+    __tablename__ = 'Friends'
+
+    user_to = db.Column(db.Integer, db.ForeignKey(User.id), primary_key=True)
+    user_from = db.Column(db.Integer, db.ForeignKey(User.id), primary_key=True)
+    status = db.Column(db.Integer)
+
+    def __init__(self, user_to, user_from, status):
+        self.user_to = user_to
+        self.user_from = user_from
+        self.status = status
+
+    def __repr__(self):
+        return "user_to: {}, user_from {}, stats: {}".format(self.user_to, self.user_from, self.status)
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
 class Bet(db.Model):
     """
         Create a Bet table
