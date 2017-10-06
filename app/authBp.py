@@ -22,6 +22,11 @@ def checkLogin():
 		if not userId:
 			return jsonify({'result' : False, 'error' : "Invalid token"})
 		authClass.setUserId(userId)
+		userExist = authClass.check_self_email(userId)
+		if not userExist:
+			addSuc = authClass.create_new_user(userId)
+			if not addSuc:
+				print("user not added")
 		newToken = authClass.generateNewToken()
 		return jsonify({'result' : True, 'selfToken' : newToken})
 	return jsonify({'result' : False, 'error' : "Invalid request"})
