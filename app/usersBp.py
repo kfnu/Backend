@@ -106,3 +106,20 @@ def getIdByEmail():
         return jsonify({'result': True, 'error': '', 'id': user.id}), 200
 
     return jsonify({'result': False, 'error': "Invalid request"}), 400
+
+@userRoutes.route('/getid', methods=['POST'])
+def getEmailById():
+    if request.method == 'POST':
+        payload = json.loads(request.data.decode())
+        token = payload['authToken']
+        id = payload['id']
+        if authClass.decode_jwt(token) is False:
+            return jsonify({'result': False, 'error': 'Failed Token'}), 400
+
+        user = db.session.query(User).filter_by(id=id).first()
+        if user is None:
+            return jsonify({'resuslt': True, 'error': ''}), 400
+
+        return jsonify({'result': True, 'error': '', 'email': user.email}), 200
+
+    return jsonify({'result': False, 'error': "Invalid request"}), 400
