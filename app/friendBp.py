@@ -45,6 +45,7 @@ def getFriends():
             obj = {
                 'status': friend.status,
                 'friend': {
+                    'id': user.id,
                     'username': user.username,
                     'email': user.email,
                     'birthday': user.birthday
