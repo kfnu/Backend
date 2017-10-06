@@ -51,8 +51,7 @@ def getFriends():
                 }
             }
             results.append(obj)
-        response = jsonify(results), 200
-        return response
+        return jsonfiy({'friends_obj': results}), 200
 
     return jsonify({'result': False, 'error': "Invalid request"}), 400
 
