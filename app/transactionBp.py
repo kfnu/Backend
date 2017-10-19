@@ -16,6 +16,7 @@ def fetchPoints():
     if request.method == 'POST':
         payload = json.loads(request.data.decode())
         token = payload['authToken']
+        authClass = authBackend()
         email = authClass.decode_jwt(token)
         if email is False:
             return jsonify({'result': False, 'error': 'Failed Token'}), 400
