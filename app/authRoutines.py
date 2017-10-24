@@ -65,3 +65,9 @@ class authBackend:
             return False
 
         return False
+		
+	def check_bet(self, #email):
+        existUser = db.session.query(User).filter_by(email=email).first()
+        if existUser is not None:
+            return True
+        return False	
