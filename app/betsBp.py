@@ -108,4 +108,40 @@ def create_bet():
                 return jsonify({'result': False, 'error': e.message}), 400
             bet.save()
             return jsonify({'result': True, 'error': ""}), 200
+			
+def edit_bet():
 
+    authClass = authBackend()
+
+    if request.method == 'POST':
+        payload = json.loads(request.data.decode())
+
+        print(payload)
+
+
+        token = payload['authToken']
+
+
+        email = authClass.decode_jwt(token)
+
+        user = db.session.query(models.User).filter_by(email=email).first()
+
+
+        if email is False:
+            return jsonify({'result': False, 'error': 'Failed Token'}), 400
+        else:
+
+            creator = user.id
+            maxUsers = payload['maxUsers']
+            title = payload['title']
+            text = payload['description']
+            amount = payload['amount']
+            locked = payload['locked']
+
+
+            try:
+                bet = models.Bet(creator, maxUsers, title, text, amount, locked)
+            except AssertionError as e:
+                return jsonify({'result': False, 'error': e.message}), 400
+            bet.save()
+            return jsonify({'result': True, 'error': ""}), 200
